@@ -1,0 +1,365 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  #pres-root { font-family: 'Noto Sans JP', sans-serif; max-width: 760px; margin: 0 auto; padding: 1rem 0 2rem; }
+  .slide { display: none; min-height: 420px; border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 2.5rem 3rem; background: var(--color-background-primary); position: relative; overflow: hidden; }
+  .slide.active { display: flex; flex-direction: column; }
+  .slide-flag-accent { position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, #002D62 33%, #CE1126 33%, #CE1126 66%, #002D62 66%); }
+  .slide-number { font-size: 11px; letter-spacing: 0.08em; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+  .slide-tag { display: inline-block; font-size: 11px; letter-spacing: 0.06em; padding: 3px 10px; border-radius: 20px; margin-bottom: 1rem; font-weight: 500; }
+  .tag-good { background: #EAF3DE; color: #3B6D11; }
+  .tag-bad { background: #FCEBEB; color: #A32D2D; }
+  .tag-culture { background: #FAEEDA; color: #854F0B; }
+  .tag-transition { background: #E6F1FB; color: #185FA5; }
+  .tag-conclusion { background: #EEEDFE; color: #3C3489; }
+  .tag-cover { background: #002D62; color: #fff; }
+  .slide-title { font-family: 'Noto Sans JP', sans-serif; font-size: 1.85rem; font-weight: 500; color: var(--color-text-primary); line-height: 1.3; margin-bottom: 0.5rem; }
+  .slide-subtitle { font-size: 0.95rem; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+  .slide-body { flex: 1; font-size: 0.93rem; color: var(--color-text-primary); line-height: 1.9; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-top: 0.5rem; }
+  .card { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 1rem; }
+  .card-icon { font-size: 22px; margin-bottom: 6px; color: var(--color-text-secondary); }
+  .card-title { font-weight: 500; font-size: 0.88rem; color: var(--color-text-primary); margin-bottom: 4px; }
+  .card-desc { font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.6; }
+  .transition-slide { background: var(--color-background-secondary) !important; text-align: center; justify-content: center; align-items: center; }
+  .transition-slide .slide-title { font-size: 1.5rem; text-align: center; }
+  .transition-slide .slide-body { text-align: center; font-size: 0.95rem; max-width: 520px; }
+  .contrast-box { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 1rem; }
+  .contrast-box .side { padding: 1rem; border-radius: var(--border-radius-md); font-size: 0.83rem; line-height: 1.7; }
+  .side-japan { background: #E6F1FB; color: #0C447C; }
+  .side-rd { background: #FCEBEB; color: #791F1F; }
+  .side-label { font-weight: 500; font-size: 0.88rem; margin-bottom: 6px; }
+  .quote-block { border-left: 3px solid #CE1126; padding: 0.6rem 1rem; margin: 1rem 0; font-size: 1rem; color: var(--color-text-secondary); }
+  .cover-slide { min-height: 380px; background: #002D62 !important; border-color: #002D62 !important; align-items: center; justify-content: center; text-align: center; }
+  .cover-slide .slide-title { color: #fff; font-size: 2.2rem; }
+  .cover-flag { display: flex; gap: 6px; justify-content: center; margin-bottom: 1.5rem; }
+  .cover-flag span { width: 28px; height: 18px; border-radius: 2px; }
+  nav { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; padding: 0 0.25rem; }
+  nav button { font-size: 13px; padding: 7px 18px; cursor: pointer; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); color: var(--color-text-primary); font-family: 'Noto Sans JP', sans-serif; }
+  nav button:hover { background: var(--color-background-secondary); }
+  nav button:disabled { opacity: 0.3; cursor: default; }
+  #slide-counter { font-size: 13px; color: var(--color-text-secondary); }
+  .section-dots { display: flex; gap: 6px; justify-content: center; margin: 0.75rem 0 0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); cursor: pointer; }
+  .dot.active { background: #CE1126; border-color: #CE1126; }
+  .video-placeholder { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; display: flex; align-items: center; gap: 10px; font-size: 0.83rem; color: var(--color-text-secondary); margin-top: 0.75rem; }
+  .video-placeholder i { font-size: 20px; color: #CE1126; }
+</style>
+
+<div id="pres-root" role="main">
+  <h2 class="sr-only">インタラクティブプレゼンテーション：私のドミニカ共和国</h2>
+
+  <div id="slides-container">
+
+    <div class="slide cover-slide active">
+      <div class="slide-flag-accent"></div>
+      <div class="cover-flag">
+        <span style="background:#002D62;"></span>
+        <span style="background:#CE1126;"></span>
+        <span style="background:#002D62;"></span>
+      </div>
+      <div class="slide-body" style="display:flex;flex-direction:column;align-items:center;gap:0.5rem;">
+        <span class="slide-tag tag-cover">個人的な視点から</span>
+        <div class="slide-title" style="color:#fff;">私のドミニカ共和国</div>
+        <div class="slide-subtitle" style="color:rgba(255,255,255,0.7);">良いこと、悪いこと、そして私たちを私たちたらしめるもの</div>
+        <p style="color:rgba(255,255,255,0.6); font-size:0.88rem; margin-top:1rem;">ヤシの木、メレンゲ、そして矛盾に満ちた国への、正直で感情的な眼差し。</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">好きなこと — 1 / 4</div>
+      <span class="slide-tag tag-good"><i class="ti ti-sun" aria-hidden="true"></i> 良い面</span>
+      <div class="slide-title">熱帯の気候</div>
+      <div class="slide-subtitle">温かく、活気があり、時に暑すぎるほど</div>
+      <div class="slide-body">
+        <p>ドミニカ共和国はカリブ海のイスパニョーラ島の東半分を占めています。年間を通じて気温は約<strong style="font-weight:500;">27〜30℃</strong>――冬なし、コートなし、どんよりした日もなし。</p>
+        <p style="margin-top:0.75rem;">ドミニカ人にとって、寒さは非日常です。太陽は常にそこにあり、午後に大西洋からの海風が吹き込むとき、世界でここより良い場所はないと感じます。ただし、8月の暑さは許可なく抱きしめてくる抱擁のようです。</p>
+        <div class="quote-block">「ドミニカでの冬は気温が24度に下がること。みんなジャケットを着ます。」</div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">好きなこと — 2 / 4</div>
+      <span class="slide-tag tag-good"><i class="ti ti-leaf" aria-hidden="true"></i> 良い面</span>
+      <div class="slide-title">そよ風と自然の環境</div>
+      <div class="slide-subtitle">息をする島</div>
+      <div class="slide-body">
+        <p>この国には山、川、熱帯雨林、海岸線があります。標高3,000メートル以上のドゥアルテ峰はカリブ海最高峰です。自然はここでは観光スポットではなく――日常生活の背景そのものです。</p>
+        <p style="margin-top:0.75rem;">窓から入る<em>夕暮れのそよ風</em>、雨上がりの濡れた土の匂い、マンゴーの木、夜明けの鳥のさえずり――ここで育った人にとって、その環境は「ふるさと」という感覚と切り離せません。</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">好きなこと — 3 / 4</div>
+      <span class="slide-tag tag-good"><i class="ti ti-soup" aria-hidden="true"></i> 良い面</span>
+      <div class="slide-title">ドミニカの味付け</div>
+      <div class="slide-subtitle">魂を家へ連れ戻す料理</div>
+      <div class="slide-body">
+        <p><strong style="font-weight:500;">ソフリート</strong>――ドミニカでは<em>サソン</em>と呼ばれる――はクバネラ唐辛子、ニンニク、コリアンダー、タマネギなどを炒めたもので、ほぼすべてのドミニカ料理の出発点です。クリオール料理のソースコードとも言えます。</p>
+        <div class="card-grid" style="margin-top:1rem;">
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-bowl" aria-hidden="true"></i></div>
+            <div class="card-title">アビチュエラス・ギサーダス</div>
+            <div class="card-desc">赤インゲン豆をソフリート、かぼちゃ、スパイスと一緒に弱火でじっくり煮込んだもの。ほぼすべてのドミニカの食卓に並びます。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-flame" aria-hidden="true"></i></div>
+            <div class="card-title">サンコッチョ</div>
+            <div class="card-desc">7種類もの肉とユカ、バナナ、トウモロコシが入った濃厚なスープ。祝い事や家族の集まりで振る舞われます。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">好きなこと — 4 / 4</div>
+      <span class="slide-tag tag-good"><i class="ti ti-beach" aria-hidden="true"></i> 良い面</span>
+      <div class="slide-title">ビーチ</div>
+      <div class="slide-subtitle">謝らない1,600kmの海岸線</div>
+      <div class="slide-body">
+        <p>プンタカナ、ラス・テレナス、カバレテ、バラオナ――ドミニカ共和国には世界的に有名なビーチがいくつもあります。しかし普通のドミニカ人にとって、ビーチは贅沢ではなく週末の行き先、誕生日や家族の場所です。</p>
+        <p style="margin-top:0.75rem;">カリブ海の温かい海水、白い砂浜、波の音は、ここでは日常過ぎて、それが家から1時間の距離にあることがどれほど特別かを忘れてしまうほどです。</p>
+        <div class="quote-block">「ドミニカでは、ビーチが近所の公園です。」</div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">好きなこと — おまけ</div>
+      <span class="slide-tag tag-good"><i class="ti ti-users" aria-hidden="true"></i> 良い面</span>
+      <div class="slide-title">街で出会う人々</div>
+      <div class="slide-subtitle">見知らぬ人が3分で友達になれる場所</div>
+      <div class="slide-body">
+        <p>ドミニカ共和国では、人の温かさはサービスではなく生き方です。公共交通機関の中、グアグア（乗合バス）やコンチョ（乗合タクシー）では、誰も黙って乗っていません。</p>
+        <p style="margin-top:0.75rem;">野球の試合、バナナの値段、政治、隣人の話。外国人も地元民も形式なく混ざり合います。自然発生的なコミュニティの感覚は作り出せるものではありません。</p>
+        <p style="margin-top:0.75rem;">より内向的な文化から来た人には圧倒されるかもしれません。ドミニカ人にとっては、人でいっぱいの車の中での沈黙の方が奇妙なのです。</p>
+      </div>
+    </div>
+
+    <div class="slide transition-slide">
+      <div class="slide-flag-accent"></div>
+      <span class="slide-tag tag-transition" style="margin-bottom:1.5rem;"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 必要な一息</span>
+      <div class="slide-title">これらすべての良いことがあっても...</div>
+      <div class="slide-body">
+        <p>私の国は完璧ではありません。美しい顔を持ちながら、正直に向き合わなければならない困難な顔もあります。</p>
+        <p style="margin-top:1rem; font-size:0.88rem;">これから続くのは不満ではありません。何百万ものドミニカ人の日常を形作る構造的な問題への、フィルターなしの眼差しです。</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">問題点 — 1 / 3</div>
+      <span class="slide-tag tag-bad"><i class="ti ti-alert-circle" aria-hidden="true"></i> 難しい面</span>
+      <div class="slide-title">汚職</div>
+      <div class="slide-subtitle">誰もが知っていて、誰も無視できない問題</div>
+      <div class="slide-body">
+        <p>ドミニカの汚職は時折起きるスキャンダルではなく、システムそのものです。国家契約、司法、警察、許認可、公共入札に浸透しています。トランスペアレンシー・インターナショナルは一貫して、この国をラテンアメリカで汚職認識度が高い国として位置づけています。</p>
+        <p style="margin-top:0.75rem;">普通のドミニカ人はそれを当たり前のこととして受け入れています。なぜなら、そういうものだと見て育ったからです。コネがある人は前進する。ない人は待つ。この<em>パランカソ</em>（個人的なコネでプロセスをスキップすること）の文化は、不正義というより機転と見なされるほど根付いています。</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">問題点 — 2 / 3</div>
+      <span class="slide-tag tag-bad"><i class="ti ti-book" aria-hidden="true"></i> 難しい面</span>
+      <div class="slide-title">教育水準</div>
+      <div class="slide-subtitle">必要な場所に届かないシステム</div>
+      <div class="slide-body">
+        <p>2013年にドミニカはGDPの4%という教育予算の大幅増を実施――地域最大級の跳躍のひとつ――にもかかわらず、成果は依然として低水準です。PISA-DやSERCEといった地域テストでは、読解力と数学の成績が最下位層に位置しています。</p>
+        <p style="margin-top:0.75rem;">問題は予算だけではありません。教員養成の質、首都以外のインフラ、貧困に起因する中退率、そして公的雇用における能力主義の欠如も問題です。</p>
+        <p style="margin-top:0.75rem;">結果として、私立学校に通える者とそうでない者の間に大きな格差が生じています。</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <div class="slide-number">問題点 — 3 / 3</div>
+      <span class="slide-tag tag-bad"><i class="ti ti-building-community" aria-hidden="true"></i> 難しい面</span>
+      <div class="slide-title">社会的セーフティネットの欠如</div>
+      <div class="slide-subtitle">料金を払っても届かないサービス</div>
+      <div class="slide-body">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-bolt" aria-hidden="true"></i></div>
+            <div class="card-title">電力</div>
+            <div class="card-desc">電気代を払っても、1日に何度も停電します。ほとんどの家庭は自前のインバーターや発電機を持たなければ生活できません。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-droplet" aria-hidden="true"></i></div>
+            <div class="card-title">水道</div>
+            <div class="card-desc">週2〜3日しか水が来ません。家族は自分でタンクや貯水槽を設置して水を蓄えます。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-shield-off" aria-hidden="true"></i></div>
+            <div class="card-title">治安と交通</div>
+            <div class="card-desc">公共交通はカオスです。トンネルはメンテナンス不足で崩落します。警察は多くの市民にとって保護者ではなくリスクとして認識されています。</div>
+          </div>
+        </div>
+        <p style="font-size:0.82rem; color: var(--color-text-secondary); margin-top:1rem;">つまり、市民はどの国とも同様に税金や料金を払いながら、その税金が賄うべきサービスを自ら資金調達しなければなりません。</p>
+      </div>
+    </div>
+
+    <div class="slide transition-slide">
+      <div class="slide-flag-accent"></div>
+      <span class="slide-tag tag-transition" style="margin-bottom:1.5rem;"><i class="ti ti-scale" aria-hidden="true"></i> 逆説</span>
+      <div class="slide-title">でも、予想外の利点があります</div>
+      <div class="slide-body">
+        <p>国家が届かないとき、個人がその空白を埋めます。そしてその空白から、奇妙で力強いものが生まれます：<strong style="font-weight:500;">ほぼ無制限の個人の自由。</strong></p>
+        <p style="margin-top:1rem; font-size:0.88rem;">ドミニカ共和国でお金があれば、国家が与えてくれなかった国を自分で作ることができます。</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <span class="slide-tag tag-transition"><i class="ti ti-crown" aria-hidden="true"></i> 自由の逆説</span>
+      <div class="slide-title">お金があれば王様のように暮らせる</div>
+      <div class="slide-subtitle">個人の自由の源としての弱い国家</div>
+      <div class="slide-body">
+        <p>国家がサービスを保障しない国では、払える人が自分のシステムを構築します：</p>
+        <div class="card-grid" style="margin-top:0.75rem;">
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-shield-check" aria-hidden="true"></i></div>
+            <div class="card-title">民間警備</div>
+            <div class="card-desc">独自の警備を雇うか、警察に近所をパトロールするよう金を払います。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-home-check" aria-hidden="true"></i></div>
+            <div class="card-title">自前のインフラ</div>
+            <div class="card-desc">発電機、貯水槽、衛星インターネット――家が自給自足になります。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-building-bank" aria-hidden="true"></i></div>
+            <div class="card-title">政治的影響力</div>
+            <div class="card-desc">エリート層は自分たちに有利な法律を推進するよう政府関係者に賄賂を贈りますが、法的な結果はありません。</div>
+          </div>
+        </div>
+        <div class="quote-block">ここでの自由は普遍的な権利ではありません。お金で買う特権です。</div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <span class="slide-tag tag-culture"><i class="ti ti-mood-smile" aria-hidden="true"></i> ドミニカのアイデンティティ</span>
+      <div class="slide-title">私たちを形作る不思議なこと</div>
+      <div class="slide-subtitle">ここで育った人にしか分からない日常の奇妙さ</div>
+      <div class="slide-body">
+        <p>どの国にも<em>quirks</em>があります――外から見ると不思議に思えるが、それを生きてきた人には完全に普通な日常のひとコマ。ドミニカでは、そういった奇妙さが国民の魂の一部です。</p>
+        <div class="card-grid" style="margin-top:1rem;">
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-umbrella" aria-hidden="true"></i></div>
+            <div class="card-title">首都の洪水</div>
+            <div class="card-desc">サントドミンゴの排水システムは激しい雨で崩壊します。人々は逃げません――泳ぎ、遊び、車で突っ切ります。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-music" aria-hidden="true"></i></div>
+            <div class="card-title">コルメード・バチャテロ</div>
+            <div class="card-desc">夕方になるとダンスフロアに変わる街角の雑貨屋。バチャタは社会の糸として機能します。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-bolt" aria-hidden="true"></i></div>
+            <div class="card-title">電気が来たとき</div>
+            <div class="card-desc">歓声、拍手、純粋な喜び。停電が終わることは小さな集団的勝利です。</div>
+          </div>
+        </div>
+        <div class="video-placeholder"><i class="ti ti-player-play" aria-hidden="true"></i> <span>動画：サントドミンゴの洪水した通りで泳ぐ人々と水を突き進む車</span></div>
+        <div class="video-placeholder"><i class="ti ti-player-play" aria-hidden="true"></i> <span>動画：コリート・バチャテロ――ダンスフロアに変わったコルメード</span></div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <span class="slide-tag tag-culture"><i class="ti ti-mood-smile" aria-hidden="true"></i> ドミニカのアイデンティティ</span>
+      <div class="slide-title">鉄格子、ドミニカ時間、そして自由な魂</div>
+      <div class="slide-subtitle">私たちを定義するさらなる奇妙さ</div>
+      <div class="slide-body">
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-lock" aria-hidden="true"></i></div>
+            <div class="card-title">鉄の扉と窓</div>
+            <div class="card-desc">ドミニカの建築は治安の悪さを反映しています。窓の格子、金属製のドア、有刺鉄線の壁。家は要塞です。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-clock" aria-hidden="true"></i></div>
+            <div class="card-title">「ドミニカ時間」</div>
+            <div class="card-desc">遅刻は失礼ではなく――文化です。パーティーが8時なら、最初の客は10時に来ます。それが前提で、それが受け入れられています。</div>
+          </div>
+          <div class="card">
+            <div class="card-icon"><i class="ti ti-heart" aria-hidden="true"></i></div>
+            <div class="card-title">宗教、家族、自由</div>
+            <div class="card-desc">ドミニカ人は深く信仰深く家族を大切にします――しかし同時に、その価値観と矛盾するような個人の自由の中で生きています。両方が解決されないまま共存しています。</div>
+          </div>
+        </div>
+        <div class="video-placeholder"><i class="ti ti-player-play" aria-hidden="true"></i> <span>動画：サントドミンゴのアパートの鉄格子をよじ登る人</span></div>
+        <p style="font-size:0.82rem; color: var(--color-text-secondary); margin-top:1rem;">収入に関わらず、ほぼすべてのドミニカの家庭に子どもがいます。国家が機能しない中で、家族という概念と大家族のネットワークが真のサポートシステムとして機能しています。</p>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="slide-flag-accent"></div>
+      <span class="slide-tag tag-conclusion"><i class="ti ti-world" aria-hidden="true"></i> 結論</span>
+      <div class="slide-title">RDはそれほど違わない...でも同じでもない</div>
+      <div class="slide-subtitle">社会が何を優先するかというスペクトルの中の位置</div>
+      <div class="slide-body">
+        <p>すべての社会は暗黙の取引をしています：集団の安全のために、どれだけの個人の自由を手放すか？</p>
+        <div class="contrast-box">
+          <div class="side side-japan">
+            <div class="side-label">日本</div>
+            <p>高い社会的規律、厳格な規範、優れた公共サービス。個人はシステムが全員のために機能するよう自由を譲ります。</p>
+          </div>
+          <div class="side side-rd">
+            <div class="side-label">ドミニカ共和国</div>
+            <p>規則へのこだわりが薄く、公共サービスは脆弱ですが、個人の自由は広い――特にそれを払える人にとっては。</p>
+          </div>
+        </div>
+        <p style="margin-top:1rem;">抽象的にどちらが優れているということはありません。異なるコンテキスト、歴史、価値観が異なる国を生み出します。ドミニカは個人の自由が社会的な賭けに勝った国です――そのすべての意味を含めて。</p>
+        <div class="quote-block">矛盾をすべて抱えながらも、やはりここは私の国。そしてそれが大切です。</div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav>
+    <button id="btn-prev" disabled onclick="changeSlide(-1)"><i class="ti ti-arrow-left" aria-hidden="true"></i> 前へ</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+      <span id="slide-counter">1 / 15</span>
+      <div class="section-dots" id="dots"></div>
+    </div>
+    <button id="btn-next" onclick="changeSlide(1)">次へ <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+  </nav>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('dots');
+  let current = 0;
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', (i+1) + '枚目のスライドへ');
+    d.onclick = () => goTo(i);
+    dotsContainer.appendChild(d);
+  });
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dotsContainer.children[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dotsContainer.children[current].classList.add('active');
+    document.getElementById('slide-counter').textContent = (current+1) + ' / ' + slides.length;
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === slides.length - 1;
+  }
+  function changeSlide(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < slides.length) goTo(next);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') changeSlide(1);
+    if (e.key === 'ArrowLeft') changeSlide(-1);
+  });
+</script>
